@@ -39,6 +39,8 @@ Scenarios A and B use **the same 31 source leads**. The only difference is wheth
 
 Both pipelines lose the same three leads, and both reports find them. Only A can prove that the other 27 arrived.
 
+Which of the two you get depends on the integration. [Integration traceability](docs/integration-traceability.md) reviews what public documentation says about HubSpot, Zapier, Make, GoHighLevel, Kommo and Pipedrive.
+
 ## Quickstart
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
