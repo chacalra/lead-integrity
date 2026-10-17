@@ -70,7 +70,7 @@ The others cover the same person submitting twice, verified duplicates, preexist
 
 ## What it detects
 
-- **Per lead:** verified, missing, pending (inside the grace period), duplicated, merged, identity match, ambiguous (record claimed by another lead, shared by several leads, several candidates, or created before the lead), undecidable, excluded.
+- **Per lead:** verified, missing, pending (inside the grace period), duplicated, merged, identity match, ambiguous (record claimed by another lead, shared by several leads, several candidates, created before the lead, or found in a CRM export not scoped to the pipeline), undecidable, excluded.
 - **Per matched record:** late arrival, missing or mismatched campaign attribution, changed email or phone, invalid phone numbers.
 - **Per dataset:** lead IDs not preserved, a field never transmitted, timezone inconsistency, and CRM records with no source lead (only when the CRM export is scoped to the pipeline).
 

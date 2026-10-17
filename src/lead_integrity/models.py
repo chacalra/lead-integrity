@@ -66,7 +66,8 @@ class Settings:
     late_after: timedelta
     grace_period: timedelta
     systemic_threshold: float  # share of compared leads missing a field to call it systemic
-    destination_scope_is_pipeline_specific: bool  # only then are unmatched records meaningful orphans
+    # Only then are unmatched records meaningful orphans and identity matches attributable to the pipeline.
+    destination_scope_is_pipeline_specific: bool
     timezone_check: TimezoneCheck
     excluded_form_ids: frozenset[str] = frozenset()
     excluded_lead_ids: frozenset[str] = frozenset()
@@ -108,6 +109,7 @@ class AmbiguityReason(StrEnum):
     MULTIPLE_CANDIDATES = "MULTIPLE_CANDIDATES"  # several records share the email/phone
     SHARED_DESTINATION = "SHARED_DESTINATION"  # other source leads point to the same record
     PREEXISTING_RECORD = "PREEXISTING_RECORD"  # record created before the lead
+    UNSCOPED_DESTINATION = "UNSCOPED_DESTINATION"  # CRM export not limited to the pipeline: identity is not attributable
 
 
 class LatencyStatus(StrEnum):

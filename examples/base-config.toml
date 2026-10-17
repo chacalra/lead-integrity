@@ -14,7 +14,8 @@ as_of = "2026-10-04T17:00:00+00:00"  # when the CRM export was taken; must carry
 late_after_minutes = 30               # demo value
 grace_period_minutes = 120            # demo value: leads newer than this are PENDING, not MISSING
 systemic_threshold = 0.9              # demo value: share of matched records missing a field to call it systemic
-# true only if the CRM export is scoped to the same pipeline/source/window; if false, orphans are not evaluated.
+# true only if the CRM export is scoped to the same pipeline/source/window. If false, identity-only matches are
+# reported as AMBIGUOUS (UNSCOPED_DESTINATION) and orphans are not evaluated.
 destination_scope_is_pipeline_specific = true
 
 # EXPERIMENTAL heuristic to suspect a misdeclared timezone. Not a domain rule.

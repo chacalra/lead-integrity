@@ -135,6 +135,12 @@ def _ambiguity_text(o: LeadOutcome, result: Result, sharers: dict[str, int]) -> 
                     f"The contact already existed since {record.created_at:%Y-%m-%d}, before this lead. The person "
                     "existing does not prove that this new lead was processed."
                 )
+            case AmbiguityReason.UNSCOPED_DESTINATION:
+                parts.append(
+                    f"The CRM export is not limited to this pipeline, so the contact with the same {method} may "
+                    "come from another source or an earlier campaign. The person exists; there is no proof that "
+                    "this lead arrived."
+                )
             case AmbiguityReason.MULTIPLE_CANDIDATES:
                 parts.append(
                     f"{len(o.matches)} contacts share the same {method}; we cannot tell which one belongs to this lead."

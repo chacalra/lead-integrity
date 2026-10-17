@@ -9,7 +9,7 @@ as_of = "2026-10-04T17:00:00+00:00"
 late_after_minutes = 30
 grace_period_minutes = 120
 systemic_threshold = 0.9
-destination_scope_is_pipeline_specific = false
+destination_scope_is_pipeline_specific = true
 
 [timezone_check]
 min_pairs = 10
@@ -51,4 +51,4 @@ campaign_name = "Campaign Name"
 
 [report]
 title = "B. Same leads, lead ID not preserved"
-description = "The same leads as A, sent through an integration that does not store the original lead ID or the campaign ID. People can be found by email or phone, but individual lead events cannot be proven. The CRM export contains all contacts, so unmatched CRM contacts are not evaluated."
+description = "The same leads as A, sent through an integration that does not store the original lead ID or the campaign ID. People can be found by email or phone, but individual lead events cannot be proven. Demo assumption: as in A, the CRM export is filtered to the contacts this lead-ads sync created or updated in the audited window, so A and B differ only in whether the lead ID is kept. Real CRM exports may not offer that filter; without it, identity matches are reported as ambiguous."

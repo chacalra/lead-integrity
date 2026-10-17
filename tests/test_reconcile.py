@@ -415,3 +415,78 @@ def test_systemic_campaign_id_falls_back_to_name_comparison():
     outcome = reconcile(leads, records, make_settings()).outcome(leads[3].lead_id)
     assert outcome.issue_kinds == {IssueKind.ATTRIBUTION_MISMATCH}
     assert outcome.issues[0].field == "campaign_name"
+
+
+# --- Unscoped destination export -------------------------------------------------
+# destination_scope_is_pipeline_specific=False: the CRM export may contain contacts from other
+# sources, pipelines or periods, so an email/phone match cannot be attributed to the audited lead.
+
+UNSCOPED = {"destination_scope_is_pipeline_specific": False}
+
+
+def test_identity_match_against_unscoped_export_is_ambiguous():
+    leads = [make_lead(i) for i in range(10)]
+    records = [identity_record_for(lead) for lead in leads]
+    result = reconcile(leads, records, make_settings(**UNSCOPED))
+    assert result.counts() == {Status.AMBIGUOUS: 10}
+    for o in result.outcomes:
+        assert o.reasons == [AmbiguityReason.UNSCOPED_DESTINATION]
+        assert o.evidence is Evidence.IDENTITY
+        assert o.latency_status is LatencyStatus.NOT_VERIFIABLE
+        assert o.issues == []
+        assert o.field_check_basis is None
+
+
+def test_phone_only_identity_against_unscoped_export_is_ambiguous():
+    lead = make_lead(3)
+    record = identity_record_for(lead, email=None)
+    outcome = reconcile([lead], [record], make_settings(**UNSCOPED)).outcome(lead.lead_id)
+    assert outcome.status is Status.AMBIGUOUS
+    assert outcome.reasons == [AmbiguityReason.UNSCOPED_DESTINATION]
+    assert [m.method for m in outcome.matches] == [MatchMethod.PHONE]
+
+
+def test_verified_match_is_unaffected_by_unscoped_export():
+    leads, records = healthy(10)
+    result = reconcile(leads, records, make_settings(**UNSCOPED))
+    assert result.counts() == {Status.VERIFIED: 10}
+
+
+def test_missing_is_unaffected_by_unscoped_export_when_it_is_complete():
+    # Precondition made explicit: the unscoped export is a superset that is COMPLETE for the
+    # audited population (it contains every record the pipeline wrote, plus unrelated contacts).
+    # Only then does "no match anywhere" support MISSING. The tool cannot verify completeness;
+    # it is a precondition of the run, documented in docs/integration-traceability.md.
+    leads = [make_lead(i) for i in range(5)]
+    pipeline_records = [identity_record_for(lead) for lead in leads[:4]]  # lead 4 never arrived
+    unrelated_contacts = [identity_record_for(make_lead(50 + i, email=f"other{i}@example.com")) for i in range(3)]
+    complete_superset = pipeline_records + unrelated_contacts
+    outcome = reconcile(leads, complete_superset, make_settings(**UNSCOPED)).outcome(leads[4].lead_id)
+    assert outcome.status is Status.MISSING
+    assert outcome.evidence is Evidence.NONE
+
+
+def test_unscoped_reason_accumulates_with_structural_reasons():
+    a = make_lead(0, email="ana@example.com")
+    b = make_lead(1, email="ana@example.com")
+    result = reconcile([a, b], [identity_record_for(a)], make_settings(**UNSCOPED))
+    for lead in (a, b):
+        assert result.outcome(lead.lead_id).reasons == [
+            AmbiguityReason.SHARED_DESTINATION,
+            AmbiguityReason.UNSCOPED_DESTINATION,
+        ]
+
+
+def test_preexisting_is_still_detected_in_unscoped_export():
+    lead = make_lead(0)
+    record = identity_record_for(lead, delay=-timedelta(days=30))
+    outcome = reconcile([lead], [record], make_settings(**UNSCOPED)).outcome(lead.lead_id)
+    assert outcome.reasons == [AmbiguityReason.PREEXISTING_RECORD, AmbiguityReason.UNSCOPED_DESTINATION]
+
+
+def test_timezone_diagnosis_unaffected_by_unscoped_export():
+    leads = [make_lead(i) for i in range(30)]
+    records = [identity_record_for(lead, delay=-timedelta(hours=3) + timedelta(minutes=2)) for lead in leads]
+    result = reconcile(leads, records, make_settings(**UNSCOPED))
+    assert FindingKind.TIMEZONE_UNCERTAIN in result.finding_kinds
+    assert {tuple(o.reasons) for o in result.outcomes} == {(AmbiguityReason.UNSCOPED_DESTINATION,)}
