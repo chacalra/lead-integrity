@@ -1,0 +1,60 @@
+# Base configuration for the example scenarios.
+# scripts/generate_examples.py starts from this file and applies per-scenario overrides.
+#
+# Thresholds are illustrative demo values, NOT universal rules. Normal delivery delay depends on
+# the pipeline (an instant webhook trigger takes seconds to minutes; polling or native CRM syncs
+# can take much longer). Agree on these values with the pipeline owner before running on real data.
+
+[files]
+source = "source.csv"
+destination = "destination.csv"
+
+[settings]
+as_of = "2026-10-04T17:00:00+00:00"  # when the CRM export was taken; must carry an offset
+late_after_minutes = 30               # demo value
+grace_period_minutes = 120            # demo value: leads newer than this are PENDING, not MISSING
+systemic_threshold = 0.9              # demo value: share of matched records missing a field to call it systemic
+# true only if the CRM export is scoped to the same pipeline/source/window; if false, orphans are not evaluated.
+destination_scope_is_pipeline_specific = true
+
+# EXPERIMENTAL heuristic to suspect a misdeclared timezone. Not a domain rule.
+# It only switches time-based conclusions off; it never changes timestamps or raises exceptions.
+[timezone_check]
+min_pairs = 10          # fewer trustworthy pairs than this: no diagnosis
+min_share = 0.8         # share of pairs that must sit near the same non-zero whole hour
+tolerance_minutes = 15  # how near to the whole hour
+
+[exclusions]
+form_ids = []
+lead_ids = []
+
+[source]
+timezone = "UTC"        # required when timestamps carry no offset
+default_region = "US"   # for phone numbers written without a country code
+
+[source.columns]
+lead_id = "id"
+created_at = "created_time"
+email = "email"
+phone = "phone_number"
+full_name = "full_name"
+form_id = "form_id"
+campaign_id = "campaign_id"
+campaign_name = "campaign_name"
+adset_id = "adset_id"
+ad_id = "ad_id"
+is_organic = "is_organic"
+
+[destination]
+timezone = "America/Chicago"  # required when timestamps carry no offset
+default_region = "US"
+
+[destination.columns]
+record_id = "Record ID"
+created_at = "Create Date"
+email = "Email"
+additional_emails = "Additional email addresses"
+phone = "Phone Number"
+source_lead_ids = "Meta Lead ID"  # ";"-separated if the CRM keeps several
+campaign_id = "Campaign ID"
+campaign_name = "Campaign Name"

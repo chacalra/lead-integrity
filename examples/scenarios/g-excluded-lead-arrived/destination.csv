@@ -1,0 +1,15 @@
+Record ID,Create Date,First Name,Last Name,Email,Additional email addresses,Phone Number,Meta Lead ID,Campaign ID,Campaign Name,Lifecycle Stage,Original Source
+11100,2026-10-01 07:58,Mei,Brown,mei.brown10@example.org,,+12025550100,1201234560004031,120210000000002,October Retargeting,Lead,Paid Social
+11101,2026-10-01 09:59,Ryan,Kim,ryan.kim11@example.org,,+12025550101,1201234560014177,120210000000001,Spring Promo,Lead,Paid Social
+11102,2026-10-01 11:35,James,Young,james.young12@example.com,,+12025550102,1201234560016426,120210000000002,October Retargeting,Lead,Paid Social
+11103,2026-10-01 13:32,Grace,Kim,grace.kim13@example.com,,+12025550103,1201234560027915,120210000000002,October Retargeting,Lead,Paid Social
+11104,2026-10-01 14:34,Carlos,Patel,carlos.patel14@example.com,,+12025550104,1201234560031936,120210000000002,October Retargeting,Lead,Paid Social
+11105,2026-10-01 15:24,David,Walker,david.walker15@example.net,,+12025550105,1201234560041007,120210000000001,Spring Promo,Lead,Paid Social
+11106,2026-10-01 18:07,David,Patel,david.patel16@example.com,,+12025550106,1201234560052059,120210000000002,October Retargeting,Lead,Paid Social
+11107,2026-10-01 19:16,Sofia,Young,sofia.young17@example.net,,+12025550107,1201234560056604,120210000000002,October Retargeting,Lead,Paid Social
+11108,2026-10-01 22:00,Aisha,Walker,aisha.walker18@example.com,,+12025550108,1201234560067102,120210000000002,October Retargeting,Lead,Paid Social
+11109,2026-10-01 23:19,Priya,Lopez,priya.lopez19@example.com,,+12025550109,1201234560072352,120210000000001,Spring Promo,Lead,Paid Social
+11110,2026-10-02 00:04,David,Hall,david.hall20@example.net,,+12025550110,1201234560080909,120210000000002,October Retargeting,Lead,Paid Social
+11111,2026-10-02 01:53,Ryan,Walker,ryan.walker21@example.org,,+12025550111,1201234560093202,120210000000001,Spring Promo,Lead,Paid Social
+11900,2026-10-01 08:49,Test,Lead 1,test1@example.com,,+12065550100,1201234564755369,,,Lead,Paid Social
+11999,2026-10-01 12:54,Sam,Taylor,sam.taylor@example.net,,+13125550188,,120210000000002,October Retargeting,Lead,Offline Sources

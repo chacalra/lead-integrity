@@ -1,0 +1,16 @@
+Record ID,Create Date,First Name,Last Name,Email,Additional email addresses,Phone Number,Campaign ID,Campaign Name,Lifecycle Stage,Original Source
+10100,2026-10-01 08:32,Aisha,Patel,aisha.patel10@example.net,,+12025550100,120210000000001,Spring Promo,Lead,Paid Social
+10101,2026-10-01 11:11,Maria,Lee,maria.lee11@example.org,,+12025550101,120210000000001,Spring Promo,Lead,Paid Social
+10102,2026-06-13 13:43,David,Nguyen,david.nguyen12@example.com,,+12025550102,,,Lead,Organic Search
+10103,2026-10-01 14:47,Kevin,Johnson,kevin.johnson13@example.com,,+12025550103,120210000000002,October Retargeting,Lead,Paid Social
+10104,2026-10-01 16:36,Priya,Scott,priya.scott14@example.org,,+12025550104,120210000000001,Spring Promo,Lead,Paid Social
+10105,2026-10-01 18:02,Sofia,Patel,sofia.patel15@example.com,,+12025550105,120210000000002,October Retargeting,Lead,Paid Social
+10106,2026-10-01 19:27,David,Martin,david.martin16@example.net,,+12025550106,120210000000001,Spring Promo,Lead,Paid Social
+10107,2026-06-09 21:42,Carlos,Lee,carlos.lee17@example.net,,+12025550107,,,Lead,Organic Search
+10108,2026-10-02 00:03,Ryan,Johnson,ryan.johnson18@example.com,,+12025550108,120210000000002,October Retargeting,Lead,Paid Social
+10109,2026-10-02 01:35,David,Walker,david.walker19@example.net,,+12025550109,120210000000001,Spring Promo,Lead,Paid Social
+10110,2026-10-02 03:37,Aisha,Brown,aisha.brown20@example.net,,+12025550110,120210000000001,Spring Promo,Lead,Paid Social
+10111,2026-07-21 04:22,Olivia,Garcia,olivia.garcia21@example.com,,+12025550111,,,Lead,Organic Search
+10112,2026-10-02 06:25,Daniel,Clark,daniel.clark22@example.org,,+12025550112,120210000000001,Spring Promo,Lead,Paid Social
+10113,2026-10-02 08:28,Emma,Scott,emma.scott23@example.org,,+12025550113,120210000000001,Spring Promo,Lead,Paid Social
+10114,2026-10-02 10:24,Emma,Young,emma.young24@example.org,,+12025550114,120210000000002,October Retargeting,Lead,Paid Social

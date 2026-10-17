@@ -1,0 +1,9 @@
+Record ID,Create Date,First Name,Last Name,Email,Additional email addresses,Phone Number,Meta Lead ID,Campaign ID,Campaign Name,Lifecycle Stage,Original Source
+70100,2026-10-01 08:49,Priya,Smith,priya.smith10@example.net,,+12025550100,1201234560006364,120210000000001,Spring Promo,Lead,Paid Social
+70101,2026-10-01 09:46,Emma,Lopez,emma.lopez11@example.com,,+12025550101,1201234560009436,120210000000001,Spring Promo,Lead,Paid Social
+70102,2026-10-01 11:23,Maria,Martin,maria.martin12@example.net,,+12025550102,1201234560021696,120210000000002,October Retargeting,Lead,Paid Social
+70103,2026-10-01 14:07,Julia,Lopez,julia.lopez13@example.org,,+12025550103,1201234560029325,120210000000002,October Retargeting,Lead,Paid Social
+70104,2026-10-01 14:59,Carlos,Johnson,carlos.johnson14@example.org,,+12025550104,1201234560036964;1201234560074756,120210000000002,October Retargeting,Lead,Paid Social
+70105,2026-10-01 17:30,Kevin,Young,kevin.young15@example.org,,+12025550105,1201234560040966,120210000000002,October Retargeting,Lead,Paid Social
+70106,2026-10-01 19:36,Michael,Hall,michael.hall16@example.net,,+12025550106,1201234560047892,120210000000001,Spring Promo,Lead,Paid Social
+70107,2026-10-01 21:27,Mei,Patel,mei.patel17@example.org,,+12025550107,1201234560057003,120210000000001,Spring Promo,Lead,Paid Social
