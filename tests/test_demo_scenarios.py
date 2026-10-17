@@ -69,7 +69,7 @@ def test_b_identity_pipeline_proves_no_event(demo):
     assert {o.latency_status for o in found} == {LatencyStatus.NOT_VERIFIABLE}
     assert {i.evidence for o in found for i in o.issues} == {Evidence.IDENTITY}
     assert result.finding_kinds == [FindingKind.LEAD_ID_NOT_PRESERVED, FindingKind.FIELD_NOT_TRANSMITTED]
-    assert result.orphans is None
+    assert result.orphans == []  # demo assumption: the CRM export is scoped to this pipeline
 
 
 def test_c_claimed_record_does_not_prove_second_lead(demo):

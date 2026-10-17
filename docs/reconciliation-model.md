@@ -51,7 +51,7 @@ Each source lead gets exactly one status.
 | `VERIFIED` | VERIFIED | Exactly one record stores the lead ID, and it stores no other lead IDs |
 | `MERGED` | VERIFIED | Informational: the record stores this lead ID and others, so both events are proven |
 | `DUPLICATED` | VERIFIED | Two or more records store the lead ID |
-| `IDENTITY_MATCH` | IDENTITY | One unshared candidate by email or phone, with no ambiguity reason |
+| `IDENTITY_MATCH` | IDENTITY | One unshared candidate by email or phone, with no ambiguity reason, in a destination export scoped to the pipeline |
 | `AMBIGUOUS` | IDENTITY | The person exists, but the record cannot be attributed to this lead (see reasons) |
 | `MISSING` | NONE | No deterministic or identity match, and the lead is older than the grace period |
 | `PENDING` | NONE | Same, but still inside the grace period |
@@ -66,6 +66,7 @@ Each source lead gets exactly one status.
 | `MULTIPLE_CANDIDATES` | Several records share the email or phone |
 | `SHARED_DESTINATION` | Another source lead points to the same record by identity |
 | `PREEXISTING_RECORD` | The record was created before the lead (evaluated only when clocks are trustworthy, with zero tolerance) |
+| `UNSCOPED_DESTINATION` | The destination export is not scoped to the pipeline, so the matching contact may come from another source or period (see section 8) |
 
 A record that stores the lead ID counts as received even if it was created before the lead; its latency is simply not measurable.
 
@@ -98,9 +99,14 @@ A value present in the destination but absent in the source is not an issue. Own
 - **`FIELD_NOT_TRANSMITTED`**: a field is missing in at least `systemic_threshold` of the compared records that have it in the source. It is reported once, and the per-record issues for that field are silenced. If the campaign ID is systemic, attribution falls back to comparing the campaign name.
 - **`TIMEZONE_UNCERTAIN`**: with at least `min_pairs` trustworthy pairs, if `min_share` of the source-to-destination time differences sit within `tolerance` of the same non-zero whole hour. This is a diagnostic only: timestamps are never corrected. While it is active, no time-based claim is made: no latency, no `LATE`, no `PREEXISTING_RECORD`, and unmatched leads become `TEMPORAL_UNCERTAIN` instead of `MISSING` or `PENDING`. The parameters are an experimental heuristic, not a domain rule.
 
-## 8. Orphans
+## 8. Destination scope and orphans
 
-An orphan is a destination record that matches no source lead (verified, identity, or excluded). Orphans are evaluated only when `destination_scope_is_pipeline_specific = true`, meaning the CRM export is filtered to the same pipeline, source and time window. In a general CRM export, "unmatched" means nothing, so `orphans` is `None` (not evaluated).
+`destination_scope_is_pipeline_specific = true` declares that the CRM export is filtered to the same pipeline, source and time window as the source export. The flag changes two things:
+
+- **Identity matches.** In an unscoped export, a contact created by another source, pipeline or earlier campaign can match by email or phone. That proves the person exists, not that the audited lead arrived, and it can hide a real `MISSING`. So when the flag is `false`, every identity-only match is `AMBIGUOUS` with reason `UNSCOPED_DESTINATION`, never `IDENTITY_MATCH`. Matches by lead ID are unaffected: a record that stores the lead ID belongs to that lead whatever else the export contains.
+- **Orphans.** An orphan is a destination record that matches no source lead (verified, identity, or excluded). Orphans are evaluated only when the flag is `true`. In a general CRM export, "unmatched" means nothing, so `orphans` is `None` (not evaluated).
+
+`MISSING` remains valid with an unscoped export only if that export is complete for the audited population: it must include every record the pipeline wrote. The tool cannot check completeness; it is a precondition of the run.
 
 ## 9. Configuration
 

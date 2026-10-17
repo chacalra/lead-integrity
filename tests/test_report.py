@@ -5,8 +5,10 @@ import json
 
 import pytest
 from generate_examples import generate
+from helpers import identity_record_for, make_lead, make_settings
 
 from lead_integrity.config import execute, load_run
+from lead_integrity.reconcile import reconcile
 from lead_integrity.report import SURE_VERIFIED, build_items, write_outputs
 
 
@@ -78,3 +80,12 @@ def test_main_view_has_no_developer_codes(reports):
         main_view = page[: page.index("<details>")]
         for code in ("IDENTITY_MATCH", "CLAIMED_BY_OTHER_LEAD", "confidence", "source_lead_id", "LOW"):
             assert code not in main_view, (name, code)
+
+
+def test_unscoped_destination_reason_has_business_wording():
+    lead = make_lead(0)
+    settings = make_settings(destination_scope_is_pipeline_specific=False)
+    result = reconcile([lead], [identity_record_for(lead)], settings)
+    [item] = [i for i in build_items(result, settings) if i.group == "ambiguous"]
+    assert "not limited to this pipeline" in item.what
+    assert not item.sure.startswith(SURE_VERIFIED)

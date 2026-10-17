@@ -5,7 +5,8 @@ Core distinction (see docs/reconciliation-model.md):
 - IDENTITY evidence: the person exists (email/phone); this lead/event is not proven.
 State comparisons (attribution, fields) are allowed on IDENTITY_MATCH because they describe
 the person's record; they do not prove the event was processed (Issue.evidence says which).
-Event claims (arrival time, LATE) require VERIFIED.
+Event claims (arrival time, LATE) require VERIFIED. Identity matches against a CRM export that is not
+scoped to the audited pipeline are never IDENTITY_MATCH: the contact may come from another source.
 """
 
 from __future__ import annotations
@@ -109,6 +110,8 @@ def reconcile(leads: Sequence[SourceLead], records: Sequence[DestRecord], settin
             record = candidates[o.lead.lead_id][0]
             if time_is_reliable and not o.reasons and record.created_at < o.lead.created_at:
                 o.reasons.append(AmbiguityReason.PREEXISTING_RECORD)
+            if not settings.destination_scope_is_pipeline_specific:
+                o.reasons.append(AmbiguityReason.UNSCOPED_DESTINATION)
             if o.reasons:
                 o.status = Status.AMBIGUOUS
         elif o.status in (Status.MISSING, Status.PENDING):

@@ -184,10 +184,11 @@ def scenario_b():
     desc = (
         "The same leads as A, sent through an integration that does not store the original lead ID or the "
         "campaign ID. People can be found by email or phone, but individual lead events cannot be proven. "
-        "The CRM export contains all contacts, so unmatched CRM contacts are not evaluated."
+        "Demo assumption: as in A, the CRM export is filtered to the contacts this lead-ads sync created or "
+        "updated in the audited window, so A and B differ only in whether the lead ID is kept. Real CRM "
+        "exports may not offer that filter; without it, identity matches are reported as ambiguous."
     )
-    overrides = {"settings": {"destination_scope_is_pipeline_specific": False}}
-    return desc, leads, rows, overrides, {"Meta Lead ID", "Campaign ID"}
+    return desc, leads, rows, {}, {"Meta Lead ID", "Campaign ID"}
 
 
 def scenario_c():

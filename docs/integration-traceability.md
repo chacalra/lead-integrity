@@ -74,9 +74,9 @@ Across all seven routes, **no official documentation states that Meta's `created
 How much the scope of the CRM export matters depends on the evidence level:
 
 - **Deterministic matching (lead ID): a general CRM export is harmless.** A record that stores the lead ID belongs to that lead, whatever else the export contains.
-- **Identity matching (email or phone): a general export is not harmless.** A contact created by another source, another pipeline or an earlier campaign can match by email or phone. That proves the person exists in the CRM, not that the audited lead arrived through this pipeline, and it can hide a real `MISSING`. Identity matches are meaningful only when the export carries enough provenance to restrict it to the audited pipeline, source and time window. Without that provenance, an identity match should be treated as ambiguous: in the current model, `AMBIGUOUS` (for example with `PREEXISTING_RECORD`), never as evidence of arrival.
+- **Identity matching (email or phone): a general export is not harmless.** A contact created by another source, another pipeline or an earlier campaign can match by email or phone. That proves the person exists in the CRM, not that the audited lead arrived through this pipeline, and it can hide a real `MISSING`. Identity matches are meaningful only when the export carries enough provenance to restrict it to the audited pipeline, source and time window. Without that provenance, an identity match is ambiguous, never evidence of arrival.
 
-> **Not yet enforced by the implementation.** Today `destination_scope_is_pipeline_specific` only controls whether orphans are evaluated. Identity matches against an unscoped export are still reported as `IDENTITY_MATCH`. This document defines the intended semantics; aligning the code is a separate change.
+Lead Integrity enforces this: when `destination_scope_is_pipeline_specific = false`, identity-only matches are reported as `AMBIGUOUS` with reason `UNSCOPED_DESTINATION`. See [destination scope and orphans](reconciliation-model.md#8-destination-scope-and-orphans).
 
 ### When is `MISSING` high-confidence?
 
@@ -84,7 +84,7 @@ Deterministic traceability is necessary but **not sufficient**. `MISSING` findin
 
 1. **Complete coverage of the audited population.** The destination export contains every record the pipeline could have written for the audited source and time window: nothing filtered out, paginated away or deleted.
 2. **Unrelated records cannot produce false identity matches.** With lead-ID matching this holds by construction. With identity matching, records from other sources or pipelines must be excludable by provenance (see above); otherwise a coincidental email or phone match can hide a lead that never arrived.
-3. **Time conditions are valid.** Timezones are declared, no timezone inconsistency is detected, and the lead is older than the grace period. Otherwise the tool reports `TEMPORAL_UNCERTAIN` or `PENDING` instead of `MISSING`. See [dataset-level findings](reconciliation-model.md#7-dataset-level-findings) and [orphans and destination scope](reconciliation-model.md#8-orphans).
+3. **Time conditions are valid.** Timezones are declared, no timezone inconsistency is detected, and the lead is older than the grace period. Otherwise the tool reports `TEMPORAL_UNCERTAIN` or `PENDING` instead of `MISSING`. See [dataset-level findings](reconciliation-model.md#7-dataset-level-findings) and [destination scope and orphans](reconciliation-model.md#8-destination-scope-and-orphans).
 
 With identity-level traceability, `MISSING` also assumes that the email or phone stored in the CRM still matches the source: a changed email can make a delivered lead look missing.
 
